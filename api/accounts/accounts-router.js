@@ -5,7 +5,7 @@ const Account = require('./accounts-model')
 router.get('/', async (req, res, next) => {
   try { 
     const accounts = await Account.getAll()
-      res.json(accounts, 'get accounts')
+      res.json(accounts)
   } catch (err) {
     next(err)
   }
