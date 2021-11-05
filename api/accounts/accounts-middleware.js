@@ -6,12 +6,16 @@ exports.checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body
   if (name === undefined || budget === undefined) { 
     error.message = "name and budget are required"
+
   } else if (typeof name !== 'string') { 
     error.message = "name of account must be a string"
+
   } else if (name.trim().length < 3 || name.trim().length > 100) {
     error.message = "name of account must be between 3 and 100"
-  } else if (typeof budget !== isNaN(budget)) { //NaN
+
+  } else if (typeof budget !== 'number' || isNaN(budget)) { //NaN
     error.message = "budget of account must be a number"
+
   } else if (budget < 0 || budget > 1000000) {
     error.message = "budget of account is too large or too small"
   }
@@ -24,7 +28,9 @@ exports.checkAccountPayload = (req, res, next) => {
 
 exports.checkAccountNameUnique = async (req, res, next) => {
   try { 
-    const existing = await db('accounts').where('name', req.body.name.trim()).first()
+    const existing = await db('accounts')
+      .where('name', req.body.name.trim())
+      .first()
     if (existing) {
       next({ status: 400, message: 'that name is taken'})
     } else {

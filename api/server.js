@@ -9,7 +9,7 @@ server.use(express.json());
 
 server.use('/api/accounts', accountsRouter)
 
-server.get('/', (req, res) => {
+server.get('*', (req, res) => {
     res.status(404).json({
         message: 'not found'
     })
